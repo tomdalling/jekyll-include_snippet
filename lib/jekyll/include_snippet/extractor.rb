@@ -3,13 +3,13 @@ module Jekyll
     class Extractor
       BEGIN_REGEX = %r{
         (\s*)\#\s*      # Line must start with a hash (surrounding whitespace optional)
-        begin-snippet: # Magic string for beginning a snippet
-        (.+)           # The remainder of the line is the snippet name
+        begin-snippet:  # Magic string for beginning a snippet
+        (.+)            # The remainder of the line is the snippet name
       }x
 
       END_REGEX = %r{
-        \s*\#\s*        # Line must start with a hash (surrounding whitespace optional)
-        end-snippet    # Magic string for ending a snippet
+        \s*\#\s*     # Line must start with a hash (surrounding whitespace optional)
+        end-snippet  # Magic string for ending a snippet
       }x
 
       def call(source)
@@ -36,9 +36,6 @@ module Jekyll
       end
 
       private
-
-      def hash_from_snippets(snippets)
-      end
 
       class Snippet
         attr_reader :name, :indent, :lines
