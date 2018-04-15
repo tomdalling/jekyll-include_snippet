@@ -29,7 +29,19 @@ Use it from your markdown:
     Blah blah here is some code:
 
     ```ruby
-    {% include_snippet my_method_snippet from blah.rb %}
+    {% include_snippet my_method_snippet from path/to/blah.rb %}
+    ```
+
+Alternatively, you can set a default source path in the YAML frontmatter:
+
+    ---
+    title: "My Blerg Post"
+    date: "2018-01-01"
+    snippet_source: "path/to/blah.rb"
+    ---
+
+    ```ruby
+    {% include_snippet my_method_snippet %}
     ```
 
 And the text from `blah.rb` will be included into your post (and processed as markdown).

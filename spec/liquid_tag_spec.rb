@@ -1,19 +1,41 @@
 require 'ostruct'
 
 RSpec.describe Jekyll::IncludeSnippet::LiquidTag do
-  subject { described_class.parse('include_snippet', args, nil, options) }
-  let(:args) { "fizz from path/to/buzz.rb" }
-  let(:options) { OpenStruct.new({
-    line_number: 123,
-  })}
+  subject do
+    tag = described_class.parse('include_snippet', args, nil, options)
+    tag.render(context)
+  end
+  let(:options) { OpenStruct.new(line_number: 123) }
 
-  it 'renders snippets from files' do
+  before(:each) do
     allow(File).to receive(:read).with('path/to/buzz.rb').and_return(<<~END_SOURCE)
       #begin-snippet: fizz
       This is the fizz snippet
       #end-snippet
     END_SOURCE
+  end
 
-    expect(subject.render(nil)).to eq('This is the fizz snippet')
+  context 'with explicit source path argument to tag' do
+    let(:context) { {} }
+    let(:args) { "fizz from path/to/buzz.rb" }
+
+    it { is_expected.to eq('This is the fizz snippet') }
+  end
+
+  context 'with implicit source path taken from context' do
+    # this context mimics the open that Jekyll provides
+    let(:context) {{ 'page' => { 'snippet_source' => 'path/to/buzz.rb' } }}
+    let(:args) { "fizz" }
+
+    it { is_expected.to eq('This is the fizz snippet') }
+  end
+
+  context 'without any source path defined' do
+    let(:context) { {} }
+    let(:args) { "fizz" }
+
+    it 'causes an error' do
+      expect { subject }.to raise_error(RuntimeError)
+    end
   end
 end
