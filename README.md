@@ -4,11 +4,13 @@ Include snippets of text from external files into your markdown
 
 ## Installation
 
-Add it to your `Gemfile`:
+Add it to your `Gemfile` (in a way that Jekyll will load):
 
     source 'https://rubygems.org'
 
-    gem 'jekyll-include_snippet', github: 'tomdalling/jekyll-include_snippet'
+    group :jekyll_plugins do
+      gem 'jekyll-include_snippet'
+    end
 
 ## Usage
 
@@ -32,7 +34,7 @@ Use it from your markdown:
     {% include_snippet my_method_snippet from path/to/blah.rb %}
     ```
 
-Alternatively, you can set a default source path in the YAML frontmatter:
+Optionally, you can set a default source path in the YAML frontmatter:
 
     ---
     title: "My Blerg Post"
@@ -43,9 +45,6 @@ Alternatively, you can set a default source path in the YAML frontmatter:
     ```ruby
     {% include_snippet my_method_snippet %}
     ```
-
-And the text from `blah.rb` will be included into your post (and processed as markdown).
-
 
 ## License
 
