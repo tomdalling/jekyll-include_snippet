@@ -28,6 +28,11 @@ Put the special "begin-snippet" and "end-snippet" comments into your source file
 
 Use it from your markdown:
 
+    ---
+    title: "My Blerg Post"
+    date: "2018-01-01"
+    ---
+
     Blah blah here is some code:
 
     ```ruby
