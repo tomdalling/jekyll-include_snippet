@@ -54,3 +54,8 @@ Optionally, you can set a default source path in the YAML frontmatter:
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+## TODO
+
+ - Could easily be optimised for better performance
+ - Maybe a feature for evaluating code and including the result
