@@ -47,6 +47,7 @@ RSpec.describe Jekyll::IncludeSnippet::Extractor do
         #begin-snippet: indented
               I
                   am
+
            indented
                  #end-snippet
       Last
@@ -56,6 +57,7 @@ RSpec.describe Jekyll::IncludeSnippet::Extractor do
       expect(subject['indented']).to eq([
         "      I",
         "          am",
+        "",
         "   indented"
       ].join("\n"))
 
@@ -63,6 +65,7 @@ RSpec.describe Jekyll::IncludeSnippet::Extractor do
         "First",
         "        I",
         "            am",
+        "",
         "     indented",
         "Last"
       ].join("\n"))

@@ -48,9 +48,17 @@ module Jekyll
 
         def dedented_text
           lines
-            .map { |l| l[indent..-1] }
+            .map { |line| dedent(line) }
             .join
             .rstrip
+        end
+
+        def dedent(line)
+          if line.length >= indent
+            line[indent..-1]
+          else
+            line
+          end
         end
       end
     end
