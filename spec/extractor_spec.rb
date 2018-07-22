@@ -13,14 +13,16 @@ RSpec.describe Jekyll::IncludeSnippet::Extractor do
       Last line.
     END_INPUT
 
-    its(['wakka']) { is_expected.to eq('This is the wakka snippet.') }
-    its(['everything']) { is_expected.to eq(<<~END_TEXT.strip) }
-      This is the first line
+    it "works" do
+      expect(subject['wakka']).to eq('This is the wakka snippet.')
+      expect(subject['everything']).to eq(<<~END_TEXT.strip)
+        This is the first line
 
-      This is the wakka snippet.
+        This is the wakka snippet.
 
-      Last line.
-    END_TEXT
+        Last line.
+      END_TEXT
+    end
   end
 
   context 'nested snippets' do
@@ -33,8 +35,10 @@ RSpec.describe Jekyll::IncludeSnippet::Extractor do
       #end-snippet
     END_INPUT
 
-    its(['inner']) { is_expected.to eq('This is inner') }
-    its(['outer']) { is_expected.to eq("This is outer\nThis is inner") }
+    it 'works' do
+      expect(subject['inner']).to eq('This is inner')
+      expect(subject['outer']).to eq("This is outer\nThis is inner")
+    end
   end
 
   context 'indented snippets' do
@@ -48,22 +52,20 @@ RSpec.describe Jekyll::IncludeSnippet::Extractor do
       Last
     END_INPUT
 
-    its(['indented']) { is_expected.to eq(
-      [
+    it 'works' do
+      expect(subject['indented']).to eq([
         "      I",
         "          am",
         "   indented"
-      ].join("\n")
-    ) }
+      ].join("\n"))
 
-    its(['everything']) { is_expected.to eq(
-      [
+      expect(subject['everything']).to eq([
         "First",
         "        I",
         "            am",
         "     indented",
         "Last"
-      ].join("\n")
-    ) }
+      ].join("\n"))
+    end
   end
 end
