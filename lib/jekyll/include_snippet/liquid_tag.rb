@@ -3,7 +3,7 @@ module Jekyll
     class LiquidTag < Liquid::Tag
       def initialize(tag_name, arg_str, tokens)
         super
-        @snippet_name, @source_path = arg_str.split('from').map(&:strip)
+        @snippet_name, @source_path = arg_str.split(/\sfrom\s/).map(&:strip)
       end
 
       def render(context)
