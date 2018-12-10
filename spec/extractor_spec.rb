@@ -71,4 +71,21 @@ RSpec.describe Jekyll::IncludeSnippet::Extractor do
       ].join("\n"))
     end
   end
+
+  context 'ending a snippet that never began' do
+    let(:input) { "# end-snippet\n" }
+
+    it "raises a nice error" do
+      expect { subject }.to raise_error(<<~END_ERROR)
+        There was an `end-snippet` on line 0, but there doesn't
+        appear to be any matching `begin-snippet` line.
+
+        Make sure you have the correct `begin-snippet` comment --
+        something like this:
+
+            # begin-snippet: MyRadCode
+
+      END_ERROR
+    end
+  end
 end

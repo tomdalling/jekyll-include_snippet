@@ -17,11 +17,12 @@ module Jekyll
         all_snippets = []
         active_snippets = []
 
-        source.each_line do |line|
+        source.each_line.each_with_index do |line, lineno|
           case line
           when BEGIN_REGEX
             active_snippets << Snippet.new(name: $2.strip, indent: $1.length)
           when END_REGEX
+            raise missing_begin_snippet(lineno) if active_snippets.empty?
             all_snippets << active_snippets.pop
           else
             (active_snippets + [everything]).each do |snippet|
@@ -36,6 +37,19 @@ module Jekyll
       end
 
       private
+
+      def missing_begin_snippet(lineno)
+        <<~END_ERROR
+          There was an `end-snippet` on line #{lineno}, but there doesn't
+          appear to be any matching `begin-snippet` line.
+
+          Make sure you have the correct `begin-snippet` comment --
+          something like this:
+
+              # begin-snippet: MyRadCode
+
+        END_ERROR
+      end
 
       class Snippet
         attr_reader :name, :indent, :lines
