@@ -1,16 +1,11 @@
 module Jekyll
   module IncludeSnippet
     class Extractor
-      BEGIN_REGEX = %r{
-        (\s*)\#\s*      # Line must start with a hash (surrounding whitespace optional)
-        begin-snippet:  # Magic string for beginning a snippet
-        (.+)            # The remainder of the line is the snippet name
-      }x
+      attr_reader :comment_prefix
 
-      END_REGEX = %r{
-        \s*\#\s*     # Line must start with a hash (surrounding whitespace optional)
-        end-snippet  # Magic string for ending a snippet
-      }x
+      def initialize(comment_prefix:)
+        @comment_prefix = comment_prefix
+      end
 
       def call(source)
         everything = Snippet.new(name: 'everything', indent: 0)
@@ -19,9 +14,9 @@ module Jekyll
 
         source.each_line.each_with_index do |line, lineno|
           case line
-          when BEGIN_REGEX
+          when begin_regex
             active_snippets << Snippet.new(name: $2.strip, indent: $1.length)
-          when END_REGEX
+          when end_regex
             raise missing_begin_snippet(lineno) if active_snippets.empty?
             all_snippets << active_snippets.pop
           else
@@ -37,6 +32,25 @@ module Jekyll
       end
 
       private
+
+      def begin_regex
+        %r{
+          (\s*)           # optional whitespace (indenting)
+          #{Regexp.quote(comment_prefix)} # the comment prefix
+          \s*             # optional whitespace
+          begin-snippet:  # magic string for beginning a snippet
+          (.+)            # the remainder of the line is the snippet name
+        }x
+      end
+
+      def end_regex
+        %r{
+          \s*          # optional whitespace (indenting)
+          #{Regexp.quote(comment_prefix)} # the comment prefix
+          \s*          # optional whitespace
+          end-snippet  # Magic string for ending a snippet
+        }x
+      end
 
       def missing_begin_snippet(lineno)
         <<~END_ERROR

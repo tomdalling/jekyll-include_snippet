@@ -1,6 +1,6 @@
 RSpec.describe Jekyll::IncludeSnippet::Extractor do
   subject { extractor.(input) }
-  let(:extractor) { described_class.new }
+  let(:extractor) { described_class.new(comment_prefix: '#') }
 
   context 'a simple snippet' do
     let(:input) { <<~END_INPUT }
@@ -86,6 +86,20 @@ RSpec.describe Jekyll::IncludeSnippet::Extractor do
             # begin-snippet: MyRadCode
 
       END_ERROR
+    end
+  end
+
+  context 'with a different comment prefix' do
+    let(:extractor) { described_class.new(comment_prefix: "//") }
+
+    let(:input) { <<~END_INPUT }
+      // begin-snippet: wakka
+      This is the wakka snippet.
+      // end-snippet
+    END_INPUT
+
+    it "works" do
+      expect(subject['wakka']).to eq('This is the wakka snippet.')
     end
   end
 end

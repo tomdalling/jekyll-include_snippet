@@ -6,14 +6,14 @@ RSpec.describe Jekyll::IncludeSnippet::LiquidTag do
     tag.render(context)
   end
   let(:options) { OpenStruct.new(line_number: 123) }
-
   before(:each) do
-    allow(File).to receive(:read).with('path/to/buzz.rb').and_return(<<~END_SOURCE)
-      #begin-snippet: geralt_from_rivia
-      I hate portals
-      #end-snippet
-    END_SOURCE
+    allow(File).to receive(:read).with('path/to/buzz.rb').and_return(source_code)
   end
+  let(:source_code) { <<~END_SOURCE }
+    #begin-snippet: geralt_from_rivia
+    I hate portals
+    #end-snippet
+  END_SOURCE
 
   context 'with explicit source path argument to tag' do
     let(:context) { {} }
@@ -37,5 +37,17 @@ RSpec.describe Jekyll::IncludeSnippet::LiquidTag do
     it 'causes an error' do
       expect { subject }.to raise_error(RuntimeError)
     end
+  end
+
+  context 'with a custom comment prefix' do
+    let(:context) {{ 'page' => { 'snippet_comment_prefix' => '//' } }}
+    let(:args) { 'geralt_from_rivia from path/to/buzz.rb' }
+    let(:source_code) { <<~END_SOURCE }
+      //begin-snippet: geralt_from_rivia
+      I hate portals
+      //end-snippet
+    END_SOURCE
+
+    it { is_expected.to eq('I hate portals') }
   end
 end
