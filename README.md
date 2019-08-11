@@ -55,15 +55,15 @@ Optionally, you can set a default source path in the YAML frontmatter:
 
 If you're using another language, you will probably need to change the "comment prefix".
 
-  ---
-  title: "My Blerg Post"
-  date: "2018-01-01"
-  snippet_comment_prefix: "//"
-  ---
+    ---
+    title: "My Blerg Post"
+    date: "2018-01-01"
+    snippet_comment_prefix: "//"
+    ---
 
-  ```js
-  {% include_snippet whatever from whatever.js %}
-  ```
+    ```js
+    {% include_snippet whatever from whatever.js %}
+    ```
 
 ```js
 // whatever.js
