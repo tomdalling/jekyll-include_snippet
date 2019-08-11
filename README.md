@@ -51,6 +51,30 @@ Optionally, you can set a default source path in the YAML frontmatter:
     {% include_snippet my_method_snippet %}
     ```
 
+## Languages Other Than Ruby
+
+If you're using another language, you will probably need to change the "comment prefix".
+
+  ---
+  title: "My Blerg Post"
+  date: "2018-01-01"
+  snippet_comment_prefix: "//"
+  ---
+
+  ```js
+  {% include_snippet whatever from whatever.js %}
+  ```
+
+```js
+// whatever.js
+
+// begin-snippet: whatever
+function whatever() {
+  console.log("Hello there");
+}
+// end-snippet
+```
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
